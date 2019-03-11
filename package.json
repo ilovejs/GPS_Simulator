@@ -20,9 +20,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
     "@babel/preset-env": "^7.2.0",
     "@babel/preset-typescript": "^7.3.3",
-    "async": "^2.6.2",
     "gpx-parse": "^0.10.4",
-    "parse-gpx": "^1.2.0",
     "promise": "^8.0.2",
     "serverless": "^1.38.0",
     "typescript": "^3.2.2"
