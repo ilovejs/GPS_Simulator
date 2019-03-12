@@ -1,10 +1,9 @@
 const gpxParse = require("gpx-parse");
 
-//process.env.PRJ_PATH
 
-function fetch_coords(){
+module.exports.fetch_coords = () => {
     let read_promise = new Promise(function(resolve, reject) {
-        let file = '/Users/mike/Code/FE/aws-nodejs-sls/cords.gpx';
+        let file = './cords.gpx';
         let coords = [];
 
         gpxParse.parseGpxFromFile(file, function (error, data) {
@@ -37,8 +36,5 @@ function fetch_coords(){
             console.log(`arr.length: ${arr.length}`);
             resolve(arr);
         });
-
     });
-}
-
-exports.fetch_coords = fetch_coords;
+};

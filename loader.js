@@ -1,3 +1,5 @@
+'use strict';
+
 const uuid = require('uuid');
 
 let AWS = require('aws-sdk');
@@ -45,18 +47,28 @@ function batchWriteCoords(arrayCoords, tableName) {
     });
 }
 
-//module.exports.
-f = async () => {
+
+module.exports.push_coords = async (event, context) => {
+// let f = async () => {
     const coords = await run.fetch_coords();
     console.log(coords.length); //63
+
+    let tableName = process.env.TableName || 'gps_coords';
 
     let chunk = 25;
     for (let i = 0, j = coords.length; i < j; i += chunk) {
         let ta = coords.slice(i, i + chunk);
-
-        batchWriteCoords(ta, 'gps_coords');
-
+        console.log('writing..');
+        await batchWriteCoords(ta, tableName);
     }
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            message: 'Push Coords Success!',
+            length: coords.length
+        }),
+    };
 };
 
-f();
+// f();

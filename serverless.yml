@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: aws-nodejs-sls # NOTE: update this with your service name
+service: node-gps-coords-pusher
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -41,32 +41,33 @@ provider:
             - "/*"
 
 # you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+  environment:
+    TableName: 'gps_coords'
 
 # you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
+package:
+  include:
+    - node_modules/**
+    - include-me.js
+    - include-me-dir/**
 #  exclude:
 #    - exclude-me.js
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  push_coords:
+    handler: loader.push_coords
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
-#    events:
+    events:
 #      - http:
 #          path: users/create
 #          method: get
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
-#      - schedule: rate(10 minutes)
+      - schedule: rate(1 minute) # pural format if > 1
 #      - sns: greeter-topic
 #      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
 #      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
@@ -82,14 +83,14 @@ functions:
 #            detail:
 #              state:
 #                - pending
-#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cloudwatchLog: '/aws/lambda/push_coords'
 #      - cognitoUserPool:
 #          pool: MyUserPool
 #          trigger: PreSignUp
 
 #    Define function environment variables here
-#    environment:
-#      variable2: value2
+    environment:
+      TableName: 'gps_coords'
 
 # you can add CloudFormation resource templates here
 #resources:

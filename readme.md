@@ -14,5 +14,12 @@ npm install --save-dev @babel/preset-typescript @babel/plugin-proposal-class-pro
 
 https://iamturns.com/typescript-babel/
 
+## Test
+sls invoke local -f push_coords
+
+
+## Deployment
+manually create log group
+    - cloudwatchLog: '/aws/lambda/push_coords'
 
 
