@@ -1,9 +1,9 @@
 'use strict';
 
 const uuid = require('uuid');
-
 let AWS = require('aws-sdk');
-const run = require('./run.js');
+const run = require('./data.js');
+
 let docClient = new AWS.DynamoDB.DocumentClient({region: 'us-east-1'});
 
 

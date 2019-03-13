@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:http="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Leaflet.js Socket.io</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css"/>
+    <style>
+        html, body, #map {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<div id="message"></div>
+<div id="map"></div>
+<script>
+    var map;
+    var socket = io();
+
+    function initMap(){
+        console.log('Initializing map');
+
+        map = L.map("map", {
+            center: [37, -96],
+            zoom: 5
+        });
+
+        L.tileLayer(
+            "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                attribution: 'Open Street Map',
+                // maxZoom: 9
+            }).addTo(map);
+
+        map.on("click", function(){
+            console.log('map clicked');
+            socket.emit("ping", {msg: "Hello"});
+        });
+    }
+
+    (function init() {
+        initMap();
+
+        //backend signal
+        socket.on('coords', function(c) {
+            L.marker([c.lat, c.lng]).addTo(map);
+        });
+
+        socket.on("connect", function() {
+            console.log("Connected to WebSocket Server");
+        });
+
+        socket.on("pong", function(msg) {
+            //document.getElementById("message").innerHTML=msg;
+            L.marker([msg.x, msg.y]).addTo(map).bindPopup(
+                "(" + msg.x + "," + msg.y + ")").openPopup();
+        });
+    })();
+
+</script>
+</body>
+</html>
