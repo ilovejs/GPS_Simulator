@@ -30,7 +30,7 @@ function genTracks(){
     }
 }
 
-function pull_from_dynamo(){
+async function pull_from_dynamo(){
     const two_minute = 60000 * 2; //in ms
     const now_d = new Date().getTime();
     console.log(now_d);
@@ -45,7 +45,8 @@ function pull_from_dynamo(){
         }
     };
 
-    docClient.scan(params, function(err, data) {
+    let res;
+    await docClient.scan(params, function(err, data) {
         if (err) {
             console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
         } else {
@@ -54,21 +55,31 @@ function pull_from_dynamo(){
             data.Items.forEach(function(item) {
                 // console.log(item)
                 let d = new Date(item.createdAt);
+
+                // (38.85169,-77.08554)
+                io.emit('coords', {lat: item.lon, lng: item.lat});
                 console.log(item.createdAt + ' - ' + d.getMinutes() +'m'+d.getSeconds() + " - " + item.oid + ": (" + item.lat + "," + item.lon + ")");
             });
+            // res = data;
         }
     });
+    // return res;
 }
 
-pull_from_dynamo();
+// pull_from_dynamo();
 
-// setInterval(() => {
-//     console.log('emitting');
-//     io.emit('coords', genTracks());
-// }, 2000);
+sec = 1000;
 
-// server.listen(port, () => {
-//     console.log('Server listening at port %d', port);
-// });
-//
-// app.use(express.static(path.join(__dirname, 'public')));
+// io.emit('coords', genTracks());
+
+setInterval(() => {
+    console.log('loop every 1min');
+    pull_from_dynamo();
+}, sec * 30);
+
+
+server.listen(port, () => {
+    console.log('Server listening at port %d', port);
+});
+
+app.use(express.static(path.join(__dirname, 'public')));

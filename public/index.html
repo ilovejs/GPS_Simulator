@@ -89,8 +89,9 @@
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoiemh1YW5nZGV5b3V4aWFuZyIsImEiOiJjajBpc296bjgwMThvMnFycXl5NXVvcTV4In0.f-1bJHkKBXBmZ9QMNTG1Fg';
 
-        //lat, lon
-        start = [146, -32];
+        // e.g. 38.85169, -77.08554
+        // center param oder is revere order.
+        start = [-77.08554, 38.85169];
 
         let socket = io();
         let new_loc;
@@ -172,9 +173,6 @@
 
                 // add dots on map
                 map.getSource('trace').setData(data);
-
-                // move viewpoint
-                // map.panTo(new_loc);
 
                 // add history panel
                 document.getElementById('panel').innerHTML = document.getElementById('panel').innerHTML + '<br>' + new_loc.toString();
