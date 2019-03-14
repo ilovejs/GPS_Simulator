@@ -20,7 +20,6 @@ service: node-gps-coords-pusher
 provider:
   name: aws
   runtime: nodejs8.10
-# you can overwrite defaults here
   stage: dev
   region: us-east-1
 
@@ -52,7 +51,8 @@ provider:
 
   # you can define service wide environment variables here
   environment:
-    TableName: 'gps_coords'
+    TableName: "GPSDmoTable"
+    DYNAMODB_TABLE: "GPSDmoTable"
 
 # you can add packaging information here
 package:
@@ -77,7 +77,7 @@ functions:
 #          method: get
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
-      - schedule: rate(1 minute) # pural format if > 1
+      - schedule: rate(2 minutes) # pural format if > 1
 #      - sns: greeter-topic
 #      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
 #      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
@@ -99,8 +99,8 @@ functions:
 #          trigger: PreSignUp
 
 #    Define function environment variables here
-    environment:
-      TableName: 'gps_coords'
+#    environment:
+#      TableName: 'gps_coords'
 
 # you can add CloudFormation resource templates here
 #resources:
@@ -113,3 +113,30 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+#resources:
+#  Resources:
+#    #    name of table
+#    GPSDmoTable:
+#      Type: 'AWS::DynamoDB::Table'
+#      DeletionPolicy: Retain
+#      Properties:
+#        AttributeDefinitions:
+#          - AttributeName: oid
+#            AttributeType: N
+#          - AttributeName: lon
+#            AttributeType: N
+#          - AttributeName: lat
+#            AttributeType: N
+#          - AttributeName: createdAt
+#            AttributeType: S
+#          # more
+#        KeySchema:
+#          - AttributeName: createdAt
+#            KeyType: HASH
+#          - AttributeName: oid
+#            KeyType: RANGE
+#          # more key
+#        ProvisionedThroughput:
+#          ReadCapacityUnits: 1
+#          WriteCapacityUnits: 1
+#        TableName: ${self:provider.environment.DYNAMODB_TABLE}

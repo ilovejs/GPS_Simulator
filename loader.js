@@ -23,12 +23,10 @@ function batchWriteCoords(arrayCoords, tableName) {
         let item = {
             PutRequest: {
                 Item: {
-                    id: uuid.v1(),
+                    oid: i,
                     lon: arrayCoords[i].lon,
                     lat: arrayCoords[i].lat,
-                    checked: false,
                     createdAt: timestamp,
-                    updatedAt: timestamp
                 }
             }
         };
@@ -58,7 +56,7 @@ module.exports.push_coords = async (event, context) => {
     const coords = await run.fetch_coords();
     console.log(coords.length); //63
 
-    let tableName = process.env.TableName || 'gps_coords';
+    let tableName = process.env.TableName || process.env.DYNAMODB_TABLE || 'GPSDmoTable';
 
     let chunk = 25;
     for (let i = 0, j = coords.length; i < j; i += chunk) {

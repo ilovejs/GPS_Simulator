@@ -2,18 +2,24 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
+var AWS = require("aws-sdk");
+AWS.config.update({
+    region: "us-east-1"
+});
+var docClient = new AWS.DynamoDB.DocumentClient();
+
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 const port = process.env.PORT || 3000;
 
-var past_loc = {
+let past_loc = {
     lat: 146,
     lng: -32
 };
 
 function genTracks(){
-    dice = Math.random();
+    let dice = Math.random();
 
     if (dice > 0.5){
         past_loc.lat = past_loc.lat + dice * 0.0004;
@@ -24,48 +30,39 @@ function genTracks(){
     }
 }
 
-setInterval(() => {
-    console.log('emiting');
-    io.emit('coords', genTracks());
-}, 2000);
+function pull_from_dynamo(){
+    const time_stamp = new Date().getTime();
 
-server.listen(port, () => {
-    console.log('Server listening at port %d', port);
-});
+    var params = {
+        TableName : "gps_coords",
+        ProjectionExpression: "id, lat, lon",
+        KeyConditionExpression: "createdAt = :t",
+        ExpressionAttributeValues: {
+            ":t": time_stamp
+        }
+    };
 
-app.use(express.static(path.join(__dirname, 'public')));
-
-var numUsers = 0;
-
-io.on('connection', (socket) => {
-    var addedUser = false;
-
-    // when the client emits 'new message', this listens and executes
-    socket.on('new message', (data) => {
-        // we tell the client to execute 'new message'
-        socket.broadcast.emit('new message', {
-            username: socket.username,
-            message: data
-        });
+    docClient.query(params, function(err, data) {
+        if (err) {
+            console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+        } else {
+            console.log("Query succeeded.");
+            data.Items.forEach(function(item) {
+                console.log(" -", item.year + ": " + item.title);
+            });
+        }
     });
+}
 
-    // when the client emits 'add user', this listens and executes
-    socket.on('add user', (username) => {
-        if (addedUser) return;
+pull_from_dynamo()
 
-        // we store the username in the socket session for this client
-        socket.username = username;
-        ++numUsers;
-        addedUser = true;
+// setInterval(() => {
+//     console.log('emitting');
+//     io.emit('coords', genTracks());
+// }, 2000);
 
-        socket.emit('login', {
-            numUsers: numUsers
-        });
-
-        // echo globally (all clients) that a person has connected
-        socket.broadcast.emit('user joined', {
-            username: socket.username,
-            numUsers: numUsers
-        });
-    });
-});
+// server.listen(port, () => {
+//     console.log('Server listening at port %d', port);
+// });
+//
+// app.use(express.static(path.join(__dirname, 'public')));

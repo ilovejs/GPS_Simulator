@@ -62,7 +62,6 @@
     </style>
 </head>
 <body>
-
     <div id="map"><!--Load the map here --></div>
 
     <!--center current location button-->
@@ -93,16 +92,17 @@
         //lat, lon
         start = [146, -32];
 
-        var socket = io();
-        var new_loc;
-        var map = new mapboxgl.Map({
+        let socket = io();
+        let new_loc;
+
+        let map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
             center: start,
             zoom: 0,
         });
 
-        // geocoder (search control)
+        // geo-coder (search control)
         map.addControl(new MapboxGeocoder({
             accessToken: mapboxgl.accessToken
         }));
@@ -123,7 +123,7 @@
         });
 
         map.on('load', function () {
-            data = {
+            let data = {
                 "type": "FeatureCollection",
                 "features": [ {
                     "type": "Feature",
@@ -182,7 +182,6 @@
 
             console.log('call back finished.');
         });
-
     </script>
-    </body>
+</body>
 </html>
