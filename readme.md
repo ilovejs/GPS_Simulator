@@ -1,3 +1,7 @@
+## UI
+![UI](img/gps.png)
+![FUN](img/funny.png)
+
 ## File composition
 	
 	loader.js is a lambda function
