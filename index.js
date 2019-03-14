@@ -2,11 +2,11 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
-var AWS = require("aws-sdk");
+const AWS = require("aws-sdk");
 AWS.config.update({
     region: "us-east-1"
 });
-var docClient = new AWS.DynamoDB.DocumentClient();
+const docClient = new AWS.DynamoDB.DocumentClient();
 
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
@@ -31,30 +31,36 @@ function genTracks(){
 }
 
 function pull_from_dynamo(){
-    const time_stamp = new Date().getTime();
+    const two_minute = 60000 * 2; //in ms
+    const now_d = new Date().getTime();
+    console.log(now_d);
+    const two_minute_ts = now_d - two_minute;
 
-    var params = {
-        TableName : "gps_coords",
-        ProjectionExpression: "id, lat, lon",
-        KeyConditionExpression: "createdAt = :t",
+    let params = {
+        TableName : process.env.TableName || 'GPSDmoTable',
+        // KeyConditionExpression: "updatedAt > :t",
+        FilterExpression: "updatedAt > :t",
         ExpressionAttributeValues: {
-            ":t": time_stamp
+            ":t": two_minute_ts
         }
     };
 
-    docClient.query(params, function(err, data) {
+    docClient.scan(params, function(err, data) {
         if (err) {
             console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
         } else {
             console.log("Query succeeded.");
+
             data.Items.forEach(function(item) {
-                console.log(" -", item.year + ": " + item.title);
+                // console.log(item)
+                let d = new Date(item.createdAt);
+                console.log(item.createdAt + ' - ' + d.getMinutes() +'m'+d.getSeconds() + " - " + item.oid + ": (" + item.lat + "," + item.lon + ")");
             });
         }
     });
 }
 
-pull_from_dynamo()
+pull_from_dynamo();
 
 // setInterval(() => {
 //     console.log('emitting');

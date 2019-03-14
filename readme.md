@@ -17,7 +17,11 @@ sls invoke local -f push_coords
 
 
 ## Deployment
-manually create log group
+Manually create log group if any problem:
     - cloudwatchLog: '/aws/lambda/push_coords'
 
-
+Dynamo schema:
+	createdAt   N primary key  
+    oid         N sort key as part of composite key
+    lat         N
+    lon         N 

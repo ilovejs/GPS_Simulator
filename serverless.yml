@@ -77,7 +77,9 @@ functions:
 #          method: get
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
-      - schedule: rate(2 minutes) # pural format if > 1
+      # per minute start from 00:00
+      - schedule: cron(0/1 * * * ? *)
+#      - #rate(2 minutes) # pural format if > 1
 #      - sns: greeter-topic
 #      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
 #      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
@@ -113,30 +115,26 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
-#resources:
-#  Resources:
-#    #    name of table
-#    GPSDmoTable:
-#      Type: 'AWS::DynamoDB::Table'
+resources:
+  Resources:
+    #    name of table
+    GPSDmoTable:
+      Type: 'AWS::DynamoDB::Table'
 #      DeletionPolicy: Retain
-#      Properties:
-#        AttributeDefinitions:
-#          - AttributeName: oid
-#            AttributeType: N
-#          - AttributeName: lon
-#            AttributeType: N
-#          - AttributeName: lat
-#            AttributeType: N
-#          - AttributeName: createdAt
-#            AttributeType: S
-#          # more
-#        KeySchema:
-#          - AttributeName: createdAt
-#            KeyType: HASH
-#          - AttributeName: oid
-#            KeyType: RANGE
-#          # more key
-#        ProvisionedThroughput:
-#          ReadCapacityUnits: 1
-#          WriteCapacityUnits: 1
-#        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: createdAt
+            AttributeType: N
+          - AttributeName: updatedAt
+            AttributeType: N
+          # only put index key in AttributionDefinition
+        KeySchema:
+          - AttributeName: createdAt
+            KeyType: HASH
+          - AttributeName: updatedAt
+            KeyType: RANGE
+          # more key
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}

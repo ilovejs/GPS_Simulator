@@ -53,8 +53,8 @@ function batchWriteCoords(arrayCoords, tableName) {
 }
 
 
-module.exports.push_coords = async (event, context) => {
-// let f = async () => {
+// module.exports.push_coords = async (event, context) => {
+let f = async () => {
     const coords = await run.fetch_coords();
     console.log(coords.length); //63
 
@@ -76,4 +76,4 @@ module.exports.push_coords = async (event, context) => {
     };
 };
 
-// f();
+f();
