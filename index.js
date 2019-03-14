@@ -14,8 +14,8 @@ const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
 
 let past_loc = {
-    lat: 146,
-    lng: -32
+    lng: 38.85169,
+    lat: -77.08554
 };
 
 function genTracks(){
@@ -31,8 +31,9 @@ function genTracks(){
 }
 
 async function pull_from_dynamo(){
-    const two_minute = 60000 * 2; //in ms
+    const two_minute = 60000 * 2;
     const now_d = new Date().getTime();
+
     console.log(now_d);
     const two_minute_ts = now_d - two_minute;
 
@@ -45,7 +46,6 @@ async function pull_from_dynamo(){
         }
     };
 
-    let res;
     await docClient.scan(params, function(err, data) {
         if (err) {
             console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
@@ -69,17 +69,26 @@ async function pull_from_dynamo(){
 // pull_from_dynamo();
 
 sec = 1000;
-
-// io.emit('coords', genTracks());
+TEST = true;
+loop_ms = TEST === true ? sec * 2 : sec * 20;
+console.log(loop_ms);
 
 setInterval(() => {
-    console.log('loop every 1min');
-    pull_from_dynamo();
-}, sec * 30);
+    console.log('loop every ' + loop_ms + 'ms');
+
+    if (TEST === true){
+        // simulation
+        io.emit('coords', genTracks());
+    } else {
+        // real
+        pull_from_dynamo();
+    }
+}, loop_ms);
 
 
 server.listen(port, () => {
     console.log('Server listening at port %d', port);
 });
+
 
 app.use(express.static(path.join(__dirname, 'public')));
