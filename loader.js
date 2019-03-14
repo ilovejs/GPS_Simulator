@@ -54,12 +54,12 @@ function batchWriteCoords(arrayCoords, tableName) {
 
 
 module.exports.push_coords = async (event, context) => {
-// let f = async () => {
     const coords = await run.fetch_coords();
     console.log(coords.length); //63
 
     let tableName = process.env.TableName || process.env.DYNAMODB_TABLE || 'GPSDmoTable';
 
+    // dynamo limit to 25 per time
     let chunk = 25;
     for (let i = 0, j = coords.length; i < j; i += chunk) {
         let ta = coords.slice(i, i + chunk);
@@ -75,5 +75,3 @@ module.exports.push_coords = async (event, context) => {
         }),
     };
 };
-
-// f();

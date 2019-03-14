@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 
 const AWS = require("aws-sdk");
+
 AWS.config.update({
     region: "us-east-1"
 });
@@ -13,6 +14,7 @@ const io = require('socket.io')(server);
 
 const port = process.env.PORT || 3000;
 
+// initial location of fake data
 let past_loc = {
     lng: 38.85169,
     lat: -77.08554
@@ -31,6 +33,9 @@ function genTracks(){
 }
 
 async function pull_from_dynamo(){
+    /** Cloud watch trigger lambda coordinate generation.
+     * Here we pull the past minute records.
+     * */
     const two_minute = 60000 * 2;
     const now_d = new Date().getTime();
 
@@ -57,22 +62,30 @@ async function pull_from_dynamo(){
                 let d = new Date(item.createdAt);
 
                 // (38.85169,-77.08554)
-                io.emit('coords', {lat: item.lon, lng: item.lat});
+                // Signal Socket IO
+                io.emit('coords', {lat: item.lon, lng: item.lat}); //swap coordinates, since original gpx format.
+
                 console.log(item.createdAt + ' - ' + d.getMinutes() +'m'+d.getSeconds() + " - " + item.oid + ": (" + item.lat + "," + item.lon + ")");
             });
-            // res = data;
         }
     });
-    // return res;
 }
 
-// pull_from_dynamo();
 
-sec = 1000;
-TEST = true;
-loop_ms = TEST === true ? sec * 2 : sec * 20;
+TEST = false;
+
+sec_unit = 1000;
+if (process.argv.length > 2) {
+    if (process.argv[2] == '--test') {
+        TEST = true;
+    }
+}
+
+loop_ms = TEST === true ? sec_unit * 2 : sec_unit * 20;
 console.log(loop_ms);
 
+
+// event loop
 setInterval(() => {
     console.log('loop every ' + loop_ms + 'ms');
 
@@ -86,6 +99,7 @@ setInterval(() => {
 }, loop_ms);
 
 
+// app server
 server.listen(port, () => {
     console.log('Server listening at port %d', port);
 });

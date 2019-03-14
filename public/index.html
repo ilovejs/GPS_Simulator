@@ -89,8 +89,7 @@
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoiemh1YW5nZGV5b3V4aWFuZyIsImEiOiJjajBpc296bjgwMThvMnFycXl5NXVvcTV4In0.f-1bJHkKBXBmZ9QMNTG1Fg';
 
-        // e.g. 38.85169, -77.08554
-        // center param oder is revere order.
+        // initial center parameter, aware of order is revere order. e.g. 38.85169, -77.08554 is raw format
         start = [-77.08554, 38.85169];
 
         let socket = io();
@@ -100,7 +99,7 @@
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
             center: start,
-            zoom: 20,
+            zoom: 16,
         });
 
         // geo-coder (search control)
@@ -115,6 +114,7 @@
         // nav control
         map.addControl(new mapboxgl.NavigationControl());
 
+        // show location under cursor
         map.on('mousemove', function (e) {
             document.getElementById('location').innerHTML = JSON.stringify(e.lngLat);
         });
@@ -123,6 +123,7 @@
             console.log("Connected to WebSocket Server");
         });
 
+        // load mapbox after declaration, geoJSON format
         map.on('load', function () {
             let data = {
                 "type": "FeatureCollection",
@@ -155,7 +156,7 @@
             });
 
             // setup the viewport
-            map.jumpTo({ 'center': start, 'zoom': 13 });
+            map.jumpTo({ 'center': start, 'zoom': 16 });
 
             console.log('initial data loaded.');
 
