@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8d7fbd0e-6471-4e06-9c23-0c84c17d076c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/../sls_loader/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/../sls_loader/readme.md" afterDir="false" />
-    </list>
+    <list default="true" id="8d7fbd0e-6471-4e06-9c23-0c84c17d076c" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,8 +17,8 @@
         <entry file="file://$PROJECT_DIR$/../sls_loader/readme.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="273">
-                <caret line="53" column="4" selection-start-line="53" selection-start-column="4" selection-end-line="53" selection-end-column="4" />
+              <first_editor relative-caret-position="342">
+                <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
               </first_editor>
               <second_editor />
             </state>
@@ -85,6 +83,7 @@
         <option value="$PROJECT_DIR$/../sls_loader/package.json" />
         <option value="$PROJECT_DIR$/../sls_loader/public/index.html" />
         <option value="$PROJECT_DIR$/../sls_loader/index.js" />
+        <option value="$PROJECT_DIR$/../sls_loader/helper.md" />
         <option value="$PROJECT_DIR$/../sls_loader/readme.md" />
       </list>
     </option>
@@ -136,11 +135,6 @@
             <path>
               <item name="aws-nodejs-sls" type="b2602c69:ProjectViewProjectNode" />
               <item name="sls_loader" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="aws-nodejs-sls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="sls_loader" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -308,7 +302,7 @@
       <workItem from="1552222126749" duration="7156000" />
       <workItem from="1552305968785" duration="25000" />
       <workItem from="1552306046624" duration="6808000" />
-      <workItem from="1552360230549" duration="47092000" />
+      <workItem from="1552360230549" duration="47363000" />
     </task>
     <task id="LOCAL-00001" summary="dynamo writing is working">
       <created>1552343001648</created>
@@ -321,7 +315,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61081000" />
+    <option name="totallyTimeSpent" value="61352000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -541,11 +535,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../sls_loader/helper.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="1280">
+            <caret line="150" column="1" selection-start-line="150" selection-start-column="1" selection-end-line="150" selection-end-column="1" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../sls_loader/readme.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="273">
-            <caret line="53" column="4" selection-start-line="53" selection-start-column="4" selection-end-line="53" selection-end-column="4" />
+          <first_editor relative-caret-position="342">
+            <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
           </first_editor>
           <second_editor />
         </state>
