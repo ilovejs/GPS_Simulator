@@ -302,7 +302,7 @@
       <workItem from="1552222126749" duration="7156000" />
       <workItem from="1552305968785" duration="25000" />
       <workItem from="1552306046624" duration="6808000" />
-      <workItem from="1552360230549" duration="47363000" />
+      <workItem from="1552360230549" duration="47653000" />
     </task>
     <task id="LOCAL-00001" summary="dynamo writing is working">
       <created>1552343001648</created>
@@ -315,7 +315,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61352000" />
+    <option name="totallyTimeSpent" value="61642000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
