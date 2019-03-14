@@ -1,64 +1,113 @@
 <!DOCTYPE html>
-<html xmlns:http="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
-    <title>Leaflet.js Socket.io</title>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css"/>
+    <meta charset='utf-8' />
+    <title>Update a feature in realtime</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
     <style>
-        html, body, #map {
-            padding: 0;
-            margin: 0;
-            height: 100%;
-        }
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
     </style>
 </head>
 <body>
-<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<div id="message"></div>
-<div id="map"></div>
-<script>
-    var map;
-    var socket = io();
+    <div id="map">
+        <!--Load the map here -->
+    </div>
+    <script src='//d3js.org/d3.v3.min.js' charset='utf-8'></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoiemh1YW5nZGV5b3V4aWFuZyIsImEiOiJjajBpc296bjgwMThvMnFycXl5NXVvcTV4In0.f-1bJHkKBXBmZ9QMNTG1Fg';
 
-    function initMap(){
-        console.log('Initializing map');
-
-        map = L.map("map", {
-            center: [37, -96],
-            zoom: 5
-        });
-
-        L.tileLayer(
-            "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: 'Open Street Map',
-                // maxZoom: 9
-            }).addTo(map);
-
-        map.on("click", function(){
-            console.log('map clicked');
-            socket.emit("ping", {msg: "Hello"});
-        });
-    }
-
-    (function init() {
-        initMap();
-
-        //backend signal
-        socket.on('coords', function(c) {
-            L.marker([c.lat, c.lng]).addTo(map);
+        var socket = io();
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            zoom: 0
         });
 
         socket.on("connect", function() {
             console.log("Connected to WebSocket Server");
         });
 
-        socket.on("pong", function(msg) {
-            //document.getElementById("message").innerHTML=msg;
-            L.marker([msg.x, msg.y]).addTo(map).bindPopup(
-                "(" + msg.x + "," + msg.y + ")").openPopup();
-        });
-    })();
+        map.on('load', function () {
+            d3.json('data/track.geojson', function(err, data) {
+                if (err) throw err;
+                // save full coordinate list for later
+                let coordinates = data.features[0].geometry.coordinates;
+                // start by showing the first coordinate
 
-</script>
-</body>
+                start = [19, 47];
+                data.features[0].geometry.coordinates = [start]; //coordinates[0]
+
+                map.addSource('trace', {
+                    type: 'geojson',
+                    data: data
+                });
+
+                map.addLayer({
+                    "id": "trace",
+                    "type": "line",
+                    "source": "trace",
+                    "paint": {
+                        "line-color": "red",
+                        "line-opacity": 0.75,
+                        "line-width": 5
+                    }
+                });
+
+                // setup the viewport
+                map.jumpTo({ 'center': start, 'zoom': 13 });
+                map.setPitch(30);
+
+                console.log('initial data loaded.');
+
+                socket.on('coords', function(c) {
+                    if (map.getSource('trace') === undefined){
+                        return;
+                    }
+                    // keep adding data from socket
+                    new_loc = [c.lat, c.lng];
+                    console.log(new_loc);
+
+                    data.features[0].geometry.coordinates.push(new_loc);
+
+
+                    // add dots on map
+                    map.getSource('trace').setData(data);
+
+                    // move viewpoint
+                    map.panTo(new_loc);
+                });
+            });
+
+
+
+            console.log('call back finished.');
+        });
+
+
+
+
+        //This will display an input box will suggest for places as you type
+        // map.addControl(L.mapbox.geocoderControl("mapbox.places", { autocomplete: true}).on(
+        //     "select", function(data){
+        //         //This function runs when a place is selected data contains the geo-coding results
+        //         console.log(data);
+        //
+        //         //Do something with the results. Extract address and coordinates from the results and save it
+        //         requestDetails.location = {
+        //             address: data.feature["place_name"],
+        //             latitude: data.feature.center[1],
+        //             longitude: data.feature.center[0]
+        //         };
+        //
+        //         //Set the marker to new location
+        //         marker.setLatLng( [data.feature.center[1], data.feature.center[0]]);
+        //     }
+        // ));
+    </script>
+    </body>
 </html>
