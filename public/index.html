@@ -5,7 +5,9 @@
     <title>Update a feature in realtime</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v3.1.4/mapbox-gl-geocoder.min.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v3.1.4/mapbox-gl-geocoder.css' type='text/css'/>
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -20,13 +22,23 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoiemh1YW5nZGV5b3V4aWFuZyIsImEiOiJjajBpc296bjgwMThvMnFycXl5NXVvcTV4In0.f-1bJHkKBXBmZ9QMNTG1Fg';
+        start = [19, 47];
 
         var socket = io();
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
-            zoom: 0
+            center: start,
+            zoom: 0,
         });
+
+        // geocoder (search control)
+        map.addControl(new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken
+        }));
+
+        // nav control
+        map.addControl(new mapboxgl.NavigationControl());
 
         socket.on("connect", function() {
             console.log("Connected to WebSocket Server");
@@ -35,12 +47,12 @@
         map.on('load', function () {
             d3.json('data/track.geojson', function(err, data) {
                 if (err) throw err;
+
                 // save full coordinate list for later
                 let coordinates = data.features[0].geometry.coordinates;
-                // start by showing the first coordinate
 
-                start = [19, 47];
-                data.features[0].geometry.coordinates = [start]; //coordinates[0]
+
+                data.features[0].geometry.coordinates = [start];
 
                 map.addSource('trace', {
                     type: 'geojson',
@@ -60,7 +72,6 @@
 
                 // setup the viewport
                 map.jumpTo({ 'center': start, 'zoom': 13 });
-                map.setPitch(30);
 
                 console.log('initial data loaded.');
 
@@ -70,10 +81,10 @@
                     }
                     // keep adding data from socket
                     new_loc = [c.lat, c.lng];
+
                     console.log(new_loc);
 
                     data.features[0].geometry.coordinates.push(new_loc);
-
 
                     // add dots on map
                     map.getSource('trace').setData(data);
@@ -83,12 +94,8 @@
                 });
             });
 
-
-
             console.log('call back finished.');
         });
-
-
 
 
         //This will display an input box will suggest for places as you type
