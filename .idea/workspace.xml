@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8d7fbd0e-6471-4e06-9c23-0c84c17d076c" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/../sls_loader/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../sls_loader/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sls_loader/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../sls_loader/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sls_loader/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../sls_loader/public/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,8 +20,14 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../sls_loader/public/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
-              <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
+            <state relative-caret-position="108">
+              <caret line="157" lean-forward="true" selection-start-line="157" selection-end-line="157" />
+              <folding>
+                <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#section#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#section#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -28,8 +35,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../sls_loader/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+            <state relative-caret-position="622">
+              <caret line="37" column="17" lean-forward="true" selection-start-line="37" selection-start-column="17" selection-end-line="37" selection-end-column="17" />
               <folding>
                 <element signature="e#619#1734#0" />
               </folding>
@@ -40,8 +47,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../sls_loader/public/data/track.geojson">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="931">
-              <caret line="49" column="1" selection-end-line="49" selection-end-column="1" />
+            <state relative-caret-position="228">
+              <caret line="12" column="22" selection-end-line="12" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -114,7 +121,7 @@
     <other-services-enabled>true</other-services-enabled>
     <auto-save>true</auto-save>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="237" />
     <option name="y" value="23" />
     <option name="width" value="1683" />
@@ -188,6 +195,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/../sls_loader/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -326,7 +334,7 @@
       <workItem from="1552222126749" duration="7156000" />
       <workItem from="1552305968785" duration="25000" />
       <workItem from="1552306046624" duration="6808000" />
-      <workItem from="1552360230549" duration="22403000" />
+      <workItem from="1552360230549" duration="29473000" />
     </task>
     <task id="LOCAL-00001" summary="dynamo writing is working">
       <created>1552343001648</created>
@@ -339,7 +347,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36392000" />
+    <option name="totallyTimeSpent" value="43462000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -351,10 +359,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="237" y="23" width="1683" height="1057" extended-state="0" />
+    <frame x="32" y="23" width="1888" height="1057" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4991453" visible="true" weight="0.08062575" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4991453" visible="true" weight="0.071772896" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" sideWeight="0.50085473" side_tool="true" weight="0.15440115" />
@@ -365,7 +373,7 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3900256" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32866243" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3284974" />
       <window_info anchor="bottom" id="TypeScript" order="7" weight="0.32866243" />
       <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.13056995" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
@@ -515,15 +523,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../sls_loader/public/data/track.geojson">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="931">
-          <caret line="49" column="1" selection-end-line="49" selection-end-column="1" />
+        <state relative-caret-position="228">
+          <caret line="12" column="22" selection-end-line="12" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/nodejs/10.7.0/node-typings/node_modules/@types/node/globals.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1008">
+          <caret line="965" column="8" selection-start-line="965" selection-start-column="8" selection-end-line="965" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../sls_loader/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+        <state relative-caret-position="622">
+          <caret line="37" column="17" lean-forward="true" selection-start-line="37" selection-start-column="17" selection-end-line="37" selection-end-column="17" />
           <folding>
             <element signature="e#619#1734#0" />
           </folding>
@@ -532,8 +547,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../sls_loader/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
+        <state relative-caret-position="108">
+          <caret line="157" lean-forward="true" selection-start-line="157" selection-end-line="157" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#section#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#section#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -8,38 +8,32 @@ const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
 
 var past_loc = {
-    lat: 19,
-    lng: 47
+    lat: 146,
+    lng: -32
 };
 
 function genTracks(){
-    // var sign = Math.random() > 0.13 ? 1 : -1;
-    sign = 1;
     dice = Math.random();
 
     if (dice > 0.5){
-        past_loc.lat = past_loc.lat + sign * dice * 0.0004;
+        past_loc.lat = past_loc.lat + dice * 0.0004;
         return past_loc
     } else {
-        past_loc.lng = past_loc.lng + sign * dice * 0.0007;
+        past_loc.lng = past_loc.lng + dice * 0.0007;
         return past_loc
     }
 }
 
 setInterval(() => {
-    console.log('emiting coords.');
-
+    console.log('emiting');
     io.emit('coords', genTracks());
-}, 1000);
-
+}, 2000);
 
 server.listen(port, () => {
     console.log('Server listening at port %d', port);
 });
 
-// Routing
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 var numUsers = 0;
 

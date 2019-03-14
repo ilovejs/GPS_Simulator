@@ -9,22 +9,92 @@
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
     <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v3.1.4/mapbox-gl-geocoder.css' type='text/css'/>
     <style>
-        body { margin:0; padding:0; }
-        #map { position:absolute; top:0; bottom:0; width:100%; }
+        body {
+            margin:0;
+            padding:0;
+        }
+        #map {
+            position:absolute;
+            top:0;
+            bottom:0;
+            width:100%;
+        }
+        #current {
+            display: block;
+            position: relative;
+            margin: 0 auto auto 0;
+            width:  15%;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 12px;
+            text-align: center;
+            color: #222;
+            background: #fff;
+        }
+        #history {
+            display: block;
+            position: relative;
+            margin: 0;
+            width:  15%;
+            height: 250px;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 12px;
+            text-align: center;
+            color: #222;
+            background: #fff;
+        }
+        .header {
+            background-color: #61e5fa;
+        }
+        .wrapper {
+            height: calc(100% - 30px);
+            overflow-y: auto;
+        }
+        #pick {
+            margin: 80px 10px 0 0;
+            float: right;
+            top: 44px;
+            right: 0;
+        }
     </style>
 </head>
 <body>
-    <div id="map">
-        <!--Load the map here -->
+
+    <div id="map"><!--Load the map here --></div>
+
+    <!--center current location button-->
+    <div class="mapboxgl-ctrl-top-left" style="margin-top: 300px;">
+        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
+            <button id="reset_current_loc" class="mapboxgl-ctrl-icon mapboxgl-ctrl-geolocate" type="button" aria-label="Geolocate" aria-pressed="false"></button>
+        </div>
     </div>
+
+    <div class="info" style="font-size: 12px;">
+        <section id="current" style="padding-top: 3px; border-radius: 5px 5px 0 0;">
+            <div class="header">Current</div>
+            <div id="location"></div>
+        </section>
+
+        <section id="history" style="padding-top: 0; border-radius: 0 0 5px 5px;">
+            <div class="header">History</div>
+            <div id='panel' class="wrapper"></div>
+        </section>
+    </div>
+
     <script src='//d3js.org/d3.v3.min.js' charset='utf-8'></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoiemh1YW5nZGV5b3V4aWFuZyIsImEiOiJjajBpc296bjgwMThvMnFycXl5NXVvcTV4In0.f-1bJHkKBXBmZ9QMNTG1Fg';
-        start = [19, 47];
+
+        //lat, lon
+        start = [146, -32];
 
         var socket = io();
+        var new_loc;
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
@@ -37,84 +107,82 @@
             accessToken: mapboxgl.accessToken
         }));
 
+        $('#reset_current_loc').click(function(){
+            map.panTo(new_loc);
+        });
+
         // nav control
         map.addControl(new mapboxgl.NavigationControl());
+
+        map.on('mousemove', function (e) {
+            document.getElementById('location').innerHTML = JSON.stringify(e.lngLat);
+        });
 
         socket.on("connect", function() {
             console.log("Connected to WebSocket Server");
         });
 
         map.on('load', function () {
-            d3.json('data/track.geojson', function(err, data) {
-                if (err) throw err;
-
-                // save full coordinate list for later
-                let coordinates = data.features[0].geometry.coordinates;
-
-
-                data.features[0].geometry.coordinates = [start];
-
-                map.addSource('trace', {
-                    type: 'geojson',
-                    data: data
-                });
-
-                map.addLayer({
-                    "id": "trace",
-                    "type": "line",
-                    "source": "trace",
-                    "paint": {
-                        "line-color": "red",
-                        "line-opacity": 0.75,
-                        "line-width": 5
+            data = {
+                "type": "FeatureCollection",
+                "features": [ {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": [
+                            start
+                        ]
                     }
-                });
+                }]
+            };
 
-                // setup the viewport
-                map.jumpTo({ 'center': start, 'zoom': 13 });
+            map.addSource('trace', {
+                type: 'geojson',
+                data: data
+            });
 
-                console.log('initial data loaded.');
+            map.addLayer({
+                "id": "trace",
+                "type": "line",
+                "source": "trace",
+                "paint": {
+                    "line-color": "red",
+                    "line-opacity": 0.75,
+                    "line-width": 5
+                }
+            });
 
-                socket.on('coords', function(c) {
-                    if (map.getSource('trace') === undefined){
-                        return;
-                    }
-                    // keep adding data from socket
-                    new_loc = [c.lat, c.lng];
+            // setup the viewport
+            map.jumpTo({ 'center': start, 'zoom': 13 });
 
-                    console.log(new_loc);
+            console.log('initial data loaded.');
 
-                    data.features[0].geometry.coordinates.push(new_loc);
+            socket.on('coords', function(c) {
+                if (map.getSource('trace') === undefined){
+                    return;
+                }
 
-                    // add dots on map
-                    map.getSource('trace').setData(data);
+                // keep adding data from socket
+                new_loc = [c.lat, c.lng];
 
-                    // move viewpoint
-                    map.panTo(new_loc);
-                });
+                console.log(new_loc);
+
+                data.features[0].geometry.coordinates.push(new_loc);
+
+                // add dots on map
+                map.getSource('trace').setData(data);
+
+                // move viewpoint
+                // map.panTo(new_loc);
+
+                // add history panel
+                document.getElementById('panel').innerHTML = document.getElementById('panel').innerHTML + '<br>' + new_loc.toString();
             });
 
             console.log('call back finished.');
         });
 
-
-        //This will display an input box will suggest for places as you type
-        // map.addControl(L.mapbox.geocoderControl("mapbox.places", { autocomplete: true}).on(
-        //     "select", function(data){
-        //         //This function runs when a place is selected data contains the geo-coding results
-        //         console.log(data);
-        //
-        //         //Do something with the results. Extract address and coordinates from the results and save it
-        //         requestDetails.location = {
-        //             address: data.feature["place_name"],
-        //             latitude: data.feature.center[1],
-        //             longitude: data.feature.center[0]
-        //         };
-        //
-        //         //Set the marker to new location
-        //         marker.setLatLng( [data.feature.center[1], data.feature.center[0]]);
-        //     }
-        // ));
     </script>
     </body>
 </html>
