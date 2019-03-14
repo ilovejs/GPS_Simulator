@@ -73,3 +73,5 @@ https://iamturns.com/typescript-babel/
 
 
 ## Don't forget to turn off cloud watch
+
+## Read helper.md for more information.
